@@ -5,7 +5,8 @@ class mainShopPage {
 
     mainShopPageLocators = {
 
-        
+        nextButton: 'form#frm > ul > li:nth-of-type(2) > .page-link',
+        previousButton: 'form#frm > ul > li:nth-of-type(1) > .page-link'
 
     }
 
@@ -18,6 +19,9 @@ class mainShopPage {
     }
 
     checkProductsList(){
+
+        cy.intercept('GET', '/entries').as('mainPage')
+        cy.wait('@mainPage')
 
         cy.request({
             method: 'GET',
@@ -39,7 +43,7 @@ class mainShopPage {
                                 productName: productName.text(),
                                 productPrice: price.text(),
                                 productDescription: description.text()
-                                
+
                             })
 
                         })
@@ -60,6 +64,47 @@ class mainShopPage {
 
         })
 
+        return this
+    }
+
+    checkPagination(){
+
+        cy.get('@pagination').then(function(response){
+            console.log(response)
+            // response.body.Items
+
+            cy.getProducts().then(function(products){
+                console.log(products)
+
+
+                for(let i = 0; i < response.response.body.Items.length; i++){
+
+                    expect(products[i].productDescription).contains(response.response.body.Items[i].desc)
+                    expect(products[i].productName).contains(response.response.body.Items[i].title)
+                    expect(products[i].productPrice).contains(response.response.body.Items[i].price)
+                }
+
+            })
+        })
+
+        cy.isButtonVisible(this.mainShopPageLocators.nextButton).then(function(isVisible){
+            console.log(isVisible)
+        })
+
+        return this
+    }
+
+    nextButtonClick(){
+        cy.get(this.mainShopPageLocators.nextButton)
+            .should('contain', 'Next') 
+            .click()
+        
+        cy.intercept('POST', '/pagination').as('pagination')
+
+        cy.wait('@pagination')
+
+        
+        
         return this
     }
 

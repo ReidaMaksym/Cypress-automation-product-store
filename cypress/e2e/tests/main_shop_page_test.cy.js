@@ -10,7 +10,10 @@ describe('Main shop page testing', function(){
         mainShopPage
             .visitMainPage()
             .checkProductsList()
-
+            // .checkPagination()
+            .nextButtonClick()
+            .checkPagination()
+            // .nextButtonClick()
     })
 
 })
