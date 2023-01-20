@@ -1,10 +1,14 @@
 /// <reference types="cypress" />
 
 
+
 class mainShopPage {
 
     mainShopPageLocators = {
 
+        phonesCategory: '.list-group .list-group-item:nth-of-type(2)',
+        laptopsCategory: '.list-group .list-group-item:nth-of-type(3)',
+        monitorsCategoty: '.list-group .list-group-item:nth-of-type(4)',
         nextButton: 'form#frm > ul > li:nth-of-type(2) > .page-link',
         previousButton: 'form#frm > ul > li:nth-of-type(1) > .page-link'
 
@@ -94,17 +98,85 @@ class mainShopPage {
         return this
     }
 
-    nextButtonClick(){
-        cy.get(this.mainShopPageLocators.nextButton)
-            .should('contain', 'Next') 
+    checkCategoty(categoryName){
+        cy.intercept('POST', '/bycat').as('categoty')
+
+        if(categoryName === 'Phones'){
+            cy.get(this.mainShopPageLocators.phonesCategory)
+                .should('contain', 'Phones')
+                .click()
+        }
+        else if(categoryName === 'Laptops'){
+            cy.get(this.mainShopPageLocators.laptopsCategory)
+                .should('contain', 'Laptops')
+                .click()
+        }
+        else if(categoryName === 'Monitors'){
+            cy.get(this.mainShopPageLocators.monitorsCategoty)
+                .should('contain', 'Monitors')
+                .click()
+        }
+
+        cy.wait('@categoty')
+
+        cy.get('@categoty').then(function(categotyItems){
+
+            console.log(categotyItems)
+
+            cy.getProducts().then(function(products){
+
+
+                // response.body.Items
+                for(let i = 0; i < categotyItems.response.body.Items.length; i++){
+
+                    expect(products[i].productDescription).contains(categotyItems.response.body.Items[i].desc)
+                    expect(products[i].productName).contains(categotyItems.response.body.Items[i].title)
+                    expect(products[i].productPrice).contains(categotyItems.response.body.Items[i].price)
+                }
+
+            })
+
+        })
+
+        return this
+    
+    }
+
+    nextButtonClick(){      
+        
+        cy.isButtonVisible(this.mainShopPageLocators.nextButton).then(function(isVisible){
+            console.log(isVisible)
+            
+            if(isVisible){
+                cy.get('form#frm > ul > li:nth-of-type(2) > .page-link')
+                    .should('contain', 'Next') 
+                    .click()
+            
+                cy.intercept('POST', '/pagination').as('pagination')
+        
+                cy.wait('@pagination')
+            }
+
+        })
+        
+        // cy.get(this.mainShopPageLocators.nextButton)
+        //     .should('contain', 'Next') 
+        //     .click()
+        
+        // cy.intercept('POST', '/pagination').as('pagination')
+
+        // cy.wait('@pagination')
+
+        return this
+    }
+
+    previousButtonClick(){
+        cy.get(this.mainShopPageLocators.previousButton)
+            .should('contain', 'Previous') 
             .click()
         
-        cy.intercept('POST', '/pagination').as('pagination')
-
         cy.wait('@pagination')
 
-        
-        
         return this
     }
 
