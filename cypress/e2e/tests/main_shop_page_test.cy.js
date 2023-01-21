@@ -18,7 +18,7 @@ describe('Main shop page testing', function(){
             // .nextButtonClick()
     })
 
-    it.only('Check categories', function(){
+    it('Check categories', function(){
         mainShopPage
             .visitMainPage()
             .checkCategoty('Phones')
@@ -31,5 +31,13 @@ describe('Main shop page testing', function(){
             // .nextButtonClick()
             // .checkPagination()
     })
+
+    it.only('Add product to cart', function(){
+        mainShopPage
+            .visitMainPage()
+        
+        cy.addProductToCart(3)
+    })
+
 
 })
