@@ -36,7 +36,7 @@ describe('Main shop page testing', function(){
         mainShopPage
             .visitMainPage()
         
-        cy.addProductToCart(3)
+        cy.addProductToCart(5)
     })
 
 
