@@ -10,6 +10,12 @@ describe('Cart page test', function(){
             .visitMainPage()
     
         cy.addProductToCart(5)
+
+        mainShopPage
+            .visitMainPage()
+
+        cy.addProductToCart(3)
+
     })
 
     it('', function(){

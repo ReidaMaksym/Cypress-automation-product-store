@@ -106,6 +106,10 @@ Cypress.Commands.add('isButtonVisible', function(locator){
 
 Cypress.Commands.add('addProductToCart', function(productIndex){
 
+
+    cy.intercept('GET', '/entries').as('mainPage')
+    cy.wait('@mainPage')
+
     let products = []
 
     cy.get('#tbodyid > div').each(function($el, index, $list){
@@ -132,6 +136,7 @@ Cypress.Commands.add('addProductToCart', function(productIndex){
                 console.log(products)
 
                 let setProduct
+                // let setProduct = []
 
                 cy.get($el.find('.card-title').children()).click()
 
@@ -169,6 +174,14 @@ Cypress.Commands.add('addProductToCart', function(productIndex){
                         }
 
                         cy.task('setProducts', setProduct)
+
+                        // setProduct.push({
+                        //     productTitle: productDetails.response.body.title,
+                        //     productPrice: productDetails.response.body.price,
+                        //     productDetails: productDetails.response.body.desc
+                        // })
+
+                        // cy.wrap(setProduct).as('setProduct')
                     })
 
                 }).then(function(){
