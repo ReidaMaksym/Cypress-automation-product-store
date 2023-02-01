@@ -13,9 +13,9 @@ class cartPage {
 
         let productIds = []
 
-        cy.intercept('POST', '/viewcart').as('viewCart')
+        cy.intercept('POST', '**/viewcart').as('viewCart')
 
-        cy.intercept('POST', '/view').as('viewProduct')
+        cy.intercept('POST', '**/view').as('viewProduct')
 
         cy.wait('@viewCart')
 
@@ -79,19 +79,28 @@ class cartPage {
 
             })
 
-            cy.task('getProducts').then(function(products){
+            // cy.task('getProducts').then(function(products){
 
-                console.log(products)
+            //     console.log(products)
 
+            //     console.log(cartProducts)
+
+            // })
+
+            cy.readFile('cypress/fixtures/testData.json').then(function(fileData){
                 console.log(cartProducts)
+                console.log(fileData)
+
+                for(let i = 0; i < cartProducts.length; i++){
+
+                    expect(fileData[i].productName).contains(cartProducts[i].productTitle)
+                    expect(fileData[i].productPrice).contains(cartProducts[i].productPrice)
+                    expect(fileData[i].productDescription).contains(cartProducts[i].productDescription)
+                    
+                }
 
             })
 
-            // cy.get('@setProduct').then(function(test){
-            //     console.log(test)
-
-            //     console.log(cartProducts)
-            // })
 
         })
 

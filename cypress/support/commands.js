@@ -292,7 +292,10 @@ Cypress.Commands.add('addProductToCart_Depricated', function(...productIndex){
 
 Cypress.Commands.add('addProductToCart', function(...productIndex){
 
-    cy.intercept('GET', '/entries').as('mainPage')
+    cy.intercept('GET', '**/entries').as('mainPage')
+    cy.intercept('POST', '**/view').as('productDetails')
+    cy.intercept('POST', '**/addtocart').as('addToCart')
+
     cy.wait('@mainPage')
 
     let products = []
@@ -331,13 +334,13 @@ Cypress.Commands.add('addProductToCart', function(...productIndex){
         
                     })
     
-                    cy.wait(6000)
+                    // cy.wait(6000)
     
                     console.log($el.find('.card-title').text())
     
                     cy.get($el.find('.card-title').children()).click()
     
-                    cy.intercept('POST', '/view').as('productDetails')
+                    // cy.intercept('POST', '**/view').as('productDetails')
         
                     cy.wait('@productDetails')
     
@@ -346,7 +349,7 @@ Cypress.Commands.add('addProductToCart', function(...productIndex){
                         console.log(productDetails)
                         console.log(product)
 
-                        cy.wait(6000)
+                        // cy.wait(6000)
     
                         expect(product.productName).contains(productDetails.response.body.title)
                         expect(product.productPrice).contains(productDetails.response.body.price)
@@ -371,7 +374,7 @@ Cypress.Commands.add('addProductToCart', function(...productIndex){
     
                     })
 
-                    cy.intercept('POST', '/addtocart').as('addToCart')
+                    // cy.intercept('POST', '**/addtocart').as('addToCart')
     
                     cy.get('.btn.btn-lg.btn-success').click()
 
@@ -404,11 +407,6 @@ Cypress.Commands.add('addProductToCart', function(...productIndex){
 
 
     })
-
-
-
-
-
 
 
 })
