@@ -79,23 +79,22 @@ class cartPage {
 
             })
 
-            // cy.task('getProducts').then(function(products){
-
-            //     console.log(products)
-
-            //     console.log(cartProducts)
-
-            // })
 
             cy.readFile('cypress/fixtures/testData.json').then(function(fileData){
-                console.log(cartProducts)
-                console.log(fileData)
+
+                let sortedFileData = fileData.sort(
+                    (p1, p2) => (p1.productPrice < p2.productPrice) ? 1 : (p1.productPrice > p2.productPrice) ? -1 : 0
+                )
+
+                let sortedCartProducts = cartProducts.sort(
+                    (p1, p2) => (p1.productPrice < p2.productPrice) ? 1 : (p1.productPrice > p2.productPrice) ? -1 : 0
+                )
 
                 for(let i = 0; i < cartProducts.length; i++){
 
-                    expect(fileData[i].productName).contains(cartProducts[i].productTitle)
-                    expect(fileData[i].productPrice).contains(cartProducts[i].productPrice)
-                    expect(fileData[i].productDescription).contains(cartProducts[i].productDescription)
+                    expect(sortedFileData[i].productName).contains(sortedCartProducts[i].productTitle)
+                    expect(sortedFileData[i].productPrice).contains(sortedCartProducts[i].productPrice)
+                    expect(sortedCartProducts[i].productDescription).contains(sortedFileData[i].productDescription)
                     
                 }
 
