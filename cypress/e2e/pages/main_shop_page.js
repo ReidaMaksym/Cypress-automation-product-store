@@ -27,6 +27,16 @@ class mainShopPage {
         cy.intercept('GET', '/entries').as('mainPage')
         cy.wait('@mainPage')
 
+        // cy.get('#tbodyid > div').as('products')
+
+        // cy.get('@products').then(function(products){
+        //     console.log(products)
+    
+        //     cy.get(products.find('.card-title')).then(function(productName){
+        //         console.log(productName.text())
+        //     })
+        // })
+
         cy.request({
             method: 'GET',
             url: 'https://api.demoblaze.com/entries'
@@ -35,6 +45,9 @@ class mainShopPage {
             let productsList = []
 
             cy.get('#tbodyid > div').each(function($el, index, $list){
+
+                // console.log($el)
+                // console.log($list)
 
                 cy.get($el.find('.card-title')).then(function(productName){
                     // console.log(productName.text())

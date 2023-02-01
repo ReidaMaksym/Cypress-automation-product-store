@@ -5,23 +5,28 @@ import mainShopPage from '../pages/main_shop_page'
 
 describe('Cart page test', function(){
 
-    this.beforeEach(function(){
-        mainShopPage
-            .visitMainPage()
+    // this.beforeEach(function(){
+
+    //     cy.writeFile('cypress/fixtures/testData.json', '')
+
+    //     mainShopPage
+    //         .visitMainPage()
     
-        cy.addProductToCart(5)
+    //     cy.addProductToCart(4, 5)
 
-        mainShopPage
-            .visitMainPage()
-
-        cy.addProductToCart(3)
-
-    })
+    // })
 
     it('', function(){
-        cartPage
-            .visitCartPage()
-            .checkCart()
+        // cartPage
+        //     .visitCartPage()
+        //     .checkCart()
+
+        cy.writeFile('cypress/fixtures/testData.json', '')
+
+        mainShopPage
+            .visitMainPage()
+
+        cy.addProductToCart(1, 3, 5)
     })
 
 })

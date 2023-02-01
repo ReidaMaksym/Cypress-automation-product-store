@@ -79,9 +79,9 @@ class cartPage {
 
             })
 
-            cy.task('getProducts').then(function(prodducts){
+            cy.task('getProducts').then(function(products){
 
-                console.log(prodducts)
+                console.log(products)
 
                 console.log(cartProducts)
 

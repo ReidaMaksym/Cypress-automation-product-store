@@ -104,107 +104,311 @@ Cypress.Commands.add('isButtonVisible', function(locator){
 
 })
 
-Cypress.Commands.add('addProductToCart', function(productIndex){
+Cypress.Commands.add('addProductToCart_Depricated', function(...productIndex){
 
 
     cy.intercept('GET', '/entries').as('mainPage')
     cy.wait('@mainPage')
 
-    let products = []
+    // let products = []
+    let products
+    
+    let filePath = 'cypress/fixtures/testData.json'
 
-    cy.get('#tbodyid > div').each(function($el, index, $list){
+    productIndex.forEach(element => {
+
+        cy.get('#tbodyid > div').each(function($el, index, $list){
         
-        if(index === productIndex){
-            
-            cy.get($el.find('.card-title')).then(function(productName){
+            if(index === element){
+                
+                cy.get($el.find('.card-title')).then(function(productName){
+    
+                    cy.get($el.find('h5')).then(function(productPrice){
+                        
+                        cy.get($el.find('.card-text')).then(function(productDescription){
+    
+                            // products.push({
+                            //     productName: productName.text().trim(),
+                            //     productPrice: productPrice.text().trim(),
+                            //     productDescription: productDescription.text().trim()
+                            // })
 
-                cy.get($el.find('h5')).then(function(productPrice){
-                    
-                    cy.get($el.find('.card-text')).then(function(productDescription){
-
-                        products.push({
-                            productName: productName.text().trim(),
-                            productPrice: productPrice.text().trim(),
-                            productDescription: productDescription.text().trim()
+                            products = {
+                                productName: productName.text().trim(),
+                                productPrice: productPrice.text().trim(),
+                                productDescription: productDescription.text().trim()
+                            }
+    
                         })
-
+    
                     })
-
-                })
-
-            }).then(function(){
-                console.log(products)
-
-                let setProduct
-                // let setProduct = []
-
-                cy.get($el.find('.card-title').children()).click()
-
-                cy.intercept('POST', '/view').as('productDetails')
-
-                cy.wait('@productDetails')
-
-                cy.get('@productDetails').then(function(productDetails){
-                    console.log(productDetails)
-
-                    expect(products[0].productName).contains(productDetails.response.body.title)
-                    expect(products[0].productPrice).contains(productDetails.response.body.price)
-                    expect(productDetails.response.body.desc).contains(products[0].productDescription)
-
-                    cy.get('div#tbodyid > .name').then(function(productDetailsTitle){
-
-                        cy.get('div#tbodyid > .price-container').then(function(productDetailsPrice){
-
-                            cy.get('div#more-information > p').then(function(productDetailsDescription){
-                                
-                                expect(productDetails.response.body.title).contains(productDetailsTitle.text().trim())
-                                expect(productDetailsPrice.text().trim()).contains(productDetails.response.body.price)
-                                expect(productDetails.response.body.desc).contains(productDetailsDescription.text().trim())
-
-                            })
-
-                        })
-
-                    }).then(function(){
-
-                        setProduct = {
-                            productTitle: productDetails.response.body.title,
-                            productPrice: productDetails.response.body.price,
-                            productDetails: productDetails.response.body.desc
-                        }
-
-                        cy.task('setProducts', setProduct)
-
-                        // setProduct.push({
-                        //     productTitle: productDetails.response.body.title,
-                        //     productPrice: productDetails.response.body.price,
-                        //     productDetails: productDetails.response.body.desc
-                        // })
-
-                        // cy.wrap(setProduct).as('setProduct')
-                    })
-
+    
                 }).then(function(){
+                    console.log(products)
+    
+                    let setProduct
+                    let addToFile = []
+                    // let setProduct = []
+    
+                    cy.get($el.find('.card-title').children()).click()
+    
+                    cy.intercept('POST', '/view').as('productDetails')
+    
+                    cy.wait('@productDetails')
+    
+                    cy.get('@productDetails').then(function(productDetails){
+                        console.log(productDetails)
+
+                        // products.forEach(function(product){
+
+                        //     console.log(product)
+
+                        //     expect(product.productName).contains(productDetails.response.body.title)
+                        //     expect(product.productPrice).contains(productDetails.response.body.price)
+                        //     expect(productDetails.response.body.desc).contains(product.productDescription)
+
+                        // })
+    
+                        // expect(products[0].productName).contains(productDetails.response.body.title)
+                        // expect(products[0].productPrice).contains(productDetails.response.body.price)
+                        // expect(productDetails.response.body.desc).contains(products[0].productDescription)
+
+                        expect(products.productName).contains(productDetails.response.body.title)
+                        expect(products.productPrice).contains(productDetails.response.body.price)
+                        expect(productDetails.response.body.desc).contains(products.productDescription)
+    
+                        cy.get('div#tbodyid > .name').then(function(productDetailsTitle){
+    
+                            cy.get('div#tbodyid > .price-container').then(function(productDetailsPrice){
+    
+                                cy.get('div#more-information > p').then(function(productDetailsDescription){
+                                    
+                                    expect(productDetails.response.body.title).contains(productDetailsTitle.text().trim())
+                                    expect(productDetailsPrice.text().trim()).contains(productDetails.response.body.price)
+                                    expect(productDetails.response.body.desc).contains(productDetailsDescription.text().trim())
+    
+                                })
+    
+                            })
+    
+                        }).then(function(){
+    
+                            setProduct = {
+                                productTitle: productDetails.response.body.title,
+                                productPrice: productDetails.response.body.price,
+                                productDetails: productDetails.response.body.desc
+                            }
+    
+                            // setProduct.push({
+                            //     productTitle: productDetails.response.body.title,
+                            //     productPrice: productDetails.response.body.price,
+                            //     productDetails: productDetails.response.body.desc
+                            // })
+    
+                            // cy.task('setProducts', setProduct)
+    
+                            // addToFile.push(setProduct)
+    
+                            // cy.writeFile('cypress/fixtures/testData.json', setProduct, {flag: 'a+'})
+    
+                            cy.readFile('cypress/fixtures/testData.json', null).then(function(fileData){
+    
+                                // if(fileData.length === 0){
+                                //     // fileData = setProduct
+                                //     fileData = new Array()
+                                //     fileData.push(setProduct)
+                                // } else{
+                                //     fileData = new Array()
+                                //     fileData.push(setProduct)
+                                // }
+                                // fileData = 
+                                // fileData = []
+                                console.log('+++++++++++++++++++++++++++')
+                                console.log(fileData)
+    
+                                if( !Array.isArray(fileData) ){
+                                    fileData = new Array()
+                                }
+    
+                                
+    
+    
+                                console.log(fileData)
+                                // fileData.push(setProduct)
+                                // addToFile.push(fileData)
+    
+                                // addToFile.push(setProduct)
+    
+                                // fileData = addToFile
+                                fileData.push(setProduct)
+    
+                                // fileData = setProduct
+                                cy.writeFile('cypress/fixtures/testData.json', fileData, {flag: 'a+'})
+                            })
+    
+                            // setProduct.push({
+                            //     productTitle: productDetails.response.body.title,
+                            //     productPrice: productDetails.response.body.price,
+                            //     productDetails: productDetails.response.body.desc
+                            // })
+    
+                            // cy.wrap(setProduct).as('setProduct')
+                        })
+    
+                    }).then(function(){
+    
+                        cy.intercept('POST', '/addtocart').as('addToCart')
+    
+                        cy.get('.btn.btn-lg.btn-success').click()
+    
+                        cy.wait('@addToCart')
+    
+                        cy.get('@addToCart').then(function(addToCart){
+    
+                            console.log(addToCart)
+                            expect(addToCart.response.statusCode).eq(200)
+    
+                        }).then(function(){
+                            cy.visit('https://www.demoblaze.com/index.html')
+                        })
+    
+                    })
+                  
+                })
+    
+            }
+    
+        })
+        
+    });
+
+    // for(let i = 0; i < productIndex.length; i++){
+
+    // }
+
+
+
+})
+
+Cypress.Commands.add('addProductToCart', function(...productIndex){
+
+    cy.intercept('GET', '/entries').as('mainPage')
+    cy.wait('@mainPage')
+
+    let products = []
+    
+    let product
+
+    productIndex.forEach(function(productIndex){
+
+        cy.get('#tbodyid > div').each(function($el, index, $list){
+
+            // productIndex.forEach(function(productIndex){
+    
+                if(index === productIndex){
+    
+                    cy.get($el.find('.card-title')).then(function(productName){
+        
+                        cy.get($el.find('h5')).then(function(productPrice){
+        
+                            cy.get($el.find('.card-text')).then(function(productDescription){
+        
+                                products.push({
+                                    productName: productName.text().trim(),
+                                    productPrice: productPrice.text().trim(),
+                                    productDescription: productDescription.text().trim()
+                                })
+    
+                                product = {
+                                    productName: productName.text().trim(),
+                                    productPrice: productPrice.text().trim(),
+                                    productDescription: productDescription.text().trim()
+                                }
+    
+                            })
+        
+                        })
+        
+                    })
+    
+                    cy.wait(6000)
+    
+                    console.log($el.find('.card-title').text())
+    
+                    cy.get($el.find('.card-title').children()).click()
+    
+                    cy.intercept('POST', '/view').as('productDetails')
+        
+                    cy.wait('@productDetails')
+    
+                    cy.get('@productDetails').then(function(productDetails){
+    
+                        console.log(productDetails)
+                        console.log(product)
+
+                        cy.wait(6000)
+    
+                        expect(product.productName).contains(productDetails.response.body.title)
+                        expect(product.productPrice).contains(productDetails.response.body.price)
+                        expect(productDetails.response.body.desc).contains(product.productDescription)
+
+                        
+                        cy.get('div#tbodyid > .name').then(function(productDetailsTitle){
+    
+                            cy.get('div#tbodyid > .price-container').then(function(productDetailsPrice){
+    
+                                cy.get('div#more-information > p').then(function(productDetailsDescription){
+                                    
+                                    expect(productDetails.response.body.title).contains(productDetailsTitle.text().trim())
+                                    expect(productDetailsPrice.text().trim()).contains(productDetails.response.body.price)
+                                    expect(productDetails.response.body.desc).contains(productDetailsDescription.text().trim())
+    
+                                })
+    
+                            })
+    
+                        })
+    
+                    })
 
                     cy.intercept('POST', '/addtocart').as('addToCart')
-
+    
                     cy.get('.btn.btn-lg.btn-success').click()
 
                     cy.wait('@addToCart')
 
                     cy.get('@addToCart').then(function(addToCart){
 
-                        console.log(addToCart)
+                        // console.log(addToCart)
                         expect(addToCart.response.statusCode).eq(200)
 
                     })
+    
+                    cy.get('a#nava').click()
+    
+                    // cy.visit('https://www.demoblaze.com/index.html')
+    
+    
+                    
+                }
+    
+            // })
+    
+        }).then(function(){
+            // console.log(products)
 
-                })
-              
-            })
+            // cy.writeFile('cypress/fixtures/testData.json', products, {flag: 'a+'})
+            cy.writeFile('cypress/fixtures/testData.json', products)
 
-        }
+        })
+
 
     })
+
+
+
+
+
+
 
 })

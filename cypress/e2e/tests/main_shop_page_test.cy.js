@@ -5,7 +5,7 @@ import mainShopPage from '../pages/main_shop_page'
 
 describe('Main shop page testing', function(){
 
-    it('', function(){
+    it.only('', function(){
 
         mainShopPage
             .visitMainPage()
@@ -32,7 +32,7 @@ describe('Main shop page testing', function(){
             // .checkPagination()
     })
 
-    it.only('Add product to cart', function(){
+    it('Add product to cart', function(){
         mainShopPage
             .visitMainPage()
         
