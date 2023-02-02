@@ -410,3 +410,63 @@ Cypress.Commands.add('addProductToCart', function(...productIndex){
 
 
 })
+
+
+Cypress.Commands.add('isCartEmpty', function(){
+
+    // cy.intercept('POST', '**/viewcart').as('viewCart')
+
+    cy.get('body').then(function(body){
+
+        // cy.wait('@viewCart')
+
+        if( body.find('tr > td:nth-of-type(4) > a').length === 0){
+            console.log('NO ITEMS IN CART')
+            // return cy.wrap(true) 
+            return cy.wrap({
+                isEmpty: true,
+                length: body.find('tr > td:nth-of-type(4) > a').length
+            })
+        }
+        else{
+            console.log('THERE ARE SOME ITEMS IN CART')
+            // return cy.wrap(false)
+            return cy.wrap({
+                isEmpty: false,
+                length: body.find('tr > td:nth-of-type(4) > a').length,
+                items: cy.get('tr > td:nth-of-type(4) > a')
+            })
+        }
+
+    })
+})
+
+
+Cypress.Commands.add('deleteAllItemsFromCart', function(){
+
+    let itemsToDelete = []
+
+    cy.isCartEmpty().then(function(cartData){
+
+        if(cartData.isEmpty === false){
+
+            cy.get('tr > td:nth-of-type(4) > a').each(function($el, index, $list){
+
+                itemsToDelete.push($el)
+        
+            }).then(function(){
+                if(itemsToDelete.length >= 1){
+                    cy.get(itemsToDelete[0]).click()
+                    cy.wait(2000)
+        
+                    cy.deleteAllItemsFromCart()
+                }
+            })
+
+        }
+
+    })
+
+
+
+})

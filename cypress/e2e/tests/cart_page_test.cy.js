@@ -12,7 +12,8 @@ describe('Cart page test', function(){
         mainShopPage
             .visitMainPage()
     
-        cy.addProductToCart(1, 2, 3, 4, 5)
+        // cy.addProductToCart(1, 2, 3, 4, 5)
+        // cy.addProductToCart(1, 2)
 
     })
 
@@ -21,6 +22,7 @@ describe('Cart page test', function(){
         cartPage
             .visitCartPage()
             .checkCart()
+            .deleteItemFromCart(true, 0)
 
 
     })
