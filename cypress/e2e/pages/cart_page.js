@@ -117,9 +117,9 @@ class cartPage {
         return this
     }
 
-    deleteItemFromCart(deleAllProducts, numberOfProducts){
+    deleteItemFromCart(deleAllProducts, productIndex){
 
-        if(deleAllProducts === true && numberOfProducts === 0){
+        if(deleAllProducts === true){
 
             cy.isCartEmpty().then(function(cartData){
 
@@ -134,6 +134,17 @@ class cartPage {
 
                 }
 
+            })
+
+        }
+        else if(deleAllProducts === false){
+            
+            cy.get('tr > td:nth-of-type(4) > a').each(function($el, index, $list){
+
+                if(index === productIndex){
+                    cy.get($el).click()
+                }
+        
             })
 
         }

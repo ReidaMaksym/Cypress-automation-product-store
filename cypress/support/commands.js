@@ -445,22 +445,58 @@ Cypress.Commands.add('isCartEmpty', function(){
 Cypress.Commands.add('deleteAllItemsFromCart', function(){
 
     let itemsToDelete = []
+    let productsTotal = 0
+    let totalPrice = 0
 
     cy.isCartEmpty().then(function(cartData){
 
         if(cartData.isEmpty === false){
 
-            cy.get('tr > td:nth-of-type(4) > a').each(function($el, index, $list){
+            // cy.get('tr > td:nth-of-type(4) > a').each(function($el, index, $list){
 
-                itemsToDelete.push($el)
+            //     itemsToDelete.push($el)
         
+            // }).then(function(){
+            //     // if(itemsToDelete.length >= 1){
+                    // cy.get(itemsToDelete[0]).click()
+                    // cy.wait(2000)
+        
+                    // cy.deleteAllItemsFromCart()
+            //     // }
+            // })
+
+            cy.get('h3#totalp').then(function(total){
+                totalPrice = Number(total.text())
+            })
+
+            cy.get('#tbodyid > tr').each(function($el, index, $list){
+
+                cy.get($el.find('td:nth-of-type(3)')).then(function(productPrice){
+
+                    productsTotal += Number(productPrice.text())
+                    console.log(productPrice.text())
+                    cy.get($el.find('td:nth-of-type(4) > a')).then(function(productToDelete){
+
+                        itemsToDelete.push({
+                            totalPrice: productsTotal,
+                            productToDelete: productToDelete
+                        })
+
+                    })
+
+                })
+
             }).then(function(){
-                if(itemsToDelete.length >= 1){
-                    cy.get(itemsToDelete[0]).click()
-                    cy.wait(2000)
-        
-                    cy.deleteAllItemsFromCart()
-                }
+                console.log(itemsToDelete)
+
+                expect(itemsToDelete[itemsToDelete.length - 1].totalPrice).eq(totalPrice)
+
+                cy.get(itemsToDelete[0].productToDelete).click()
+                cy.wait(2000)
+
+                cy.deleteAllItemsFromCart()
+
+
             })
 
         }
