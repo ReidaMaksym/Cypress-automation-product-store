@@ -2,6 +2,7 @@
 
 import cartPage from '../pages/cart_page'
 import mainShopPage from '../pages/main_shop_page'
+import {placeOrderData} from '../../fixtures/inputData'
 
 describe('Cart page test', function(){
 
@@ -17,7 +18,7 @@ describe('Cart page test', function(){
 
     })
 
-    it.only('', function(){
+    it('', function(){
 
         cartPage
             .visitCartPage()
@@ -28,13 +29,19 @@ describe('Cart page test', function(){
 
     })
 
-    it('', function(){
+    it.only('', function(){
 
         cartPage
             .visitCartPage()
             .checkCart()
-            .deleteItemFromCart(false, 3)
-
+            .deleteItemFromCart(false, 1)
+            .openPlaceOrderModal()
+            .fillName(placeOrderData.name)
+            .fillCountry(placeOrderData.country)
+            .fillCity(placeOrderData.city)
+            .fillCreditCard(placeOrderData.creditCard)
+            .fillMonth(placeOrderData.month)
+            .fillYear(placeOrderData.year)
 
     })
 

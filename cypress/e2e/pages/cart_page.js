@@ -1,5 +1,16 @@
 /// <reference types="cypress" />
 
+const cartPageLocators = {
+    placeOrderBtn: '.btn.btn-success',
+    placeOrderModal: 'div#orderModal',
+    nameInput: 'input#name',
+    countryInput: 'input#country',
+    cityInput: 'input#city',
+    creditCardInput: 'input#card',
+    monthInput: 'input#month',
+    yearInput: 'input#year',
+    purchhaseBtn: "div#orderModal > div[role='document'] .btn.btn-primary"
+}
 
 class cartPage {
 
@@ -151,6 +162,82 @@ class cartPage {
 
         return this
     }
+
+    openPlaceOrderModal(){
+
+        cy.wait('@viewCart')
+        cy.wait('@viewProduct')
+        
+        cy.get(cartPageLocators.placeOrderBtn).click()
+        cy.get(cartPageLocators.placeOrderModal).should('have.class', 'show')
+        return this
+    }
+
+    fillName(name){
+
+        cy.get(cartPageLocators.nameInput)
+            .click()
+            .clear()
+            .type(name)
+
+        return this
+
+    }
+
+    fillCountry(country){
+
+        cy.get(cartPageLocators.countryInput)
+            .click()
+            .clear()
+            .type(country)
+
+        return this
+
+    }
+
+    fillCity(city){
+
+        cy.get(cartPageLocators.cityInput)
+            .click()
+            .clear()
+            .type(city)
+
+        return this
+
+    }
+
+    fillCreditCard(creditCard){
+
+        cy.get(cartPageLocators.creditCardInput)
+            .click()
+            .clear()
+            .type(creditCard)
+
+        return this
+
+    }
+
+    fillMonth(month){
+
+        cy.get(cartPageLocators.monthInput)
+            .click()
+            .clear()
+            .type(month)
+
+        return this    
+    }
+
+    fillYear(year){
+
+        cy.get(cartPageLocators.yearInput)
+            .click()
+            .clear()
+            .type(year)
+
+        return this    
+
+    }
+
 }
 
 module.exports = new cartPage()
