@@ -4,5 +4,6 @@ export const placeOrderData = {
     city: 'Test',
     creditCard: '4242424242424242',
     month: 'May',
-    year: 2023
+    year: 2023,
+    successMessage: 'Thank you for your purchase!'
 }

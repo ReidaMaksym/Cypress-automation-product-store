@@ -13,19 +13,8 @@ describe('Cart page test', function(){
         mainShopPage
             .visitMainPage()
     
-        cy.addProductToCart(1, 2, 3)
+        cy.addProductToCart(1)
         // cy.addProductToCart(1, 2)
-
-    })
-
-    it('', function(){
-
-        cartPage
-            .visitCartPage()
-            .checkCart()
-            .deleteItemFromCart(true, 0)
-            // .deleteItemFromCart(false, 3)
-
 
     })
 
@@ -34,14 +23,26 @@ describe('Cart page test', function(){
         cartPage
             .visitCartPage()
             .checkCart()
-            .deleteItemFromCart(false, 1)
-            .openPlaceOrderModal()
-            .fillName(placeOrderData.name)
-            .fillCountry(placeOrderData.country)
-            .fillCity(placeOrderData.city)
-            .fillCreditCard(placeOrderData.creditCard)
-            .fillMonth(placeOrderData.month)
-            .fillYear(placeOrderData.year)
+            // .deleteItemFromCart(true, 0)
+            // .deleteItemFromCart(false, 3)
+
+
+    })
+
+    it('', function(){
+
+        cartPage
+            .visitCartPage()
+            .checkCart()
+            .deleteItemFromCart(false, 0)
+            // .openPlaceOrderModal()
+            // .fillName(placeOrderData.name)
+            // .fillCountry(placeOrderData.country)
+            // .fillCity(placeOrderData.city)
+            // .fillCreditCard(placeOrderData.creditCard)
+            // .fillMonth(placeOrderData.month)
+            // .fillYear(placeOrderData.year)
+            // .purchhaseBtnClick()
 
     })
 

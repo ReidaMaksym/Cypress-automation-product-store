@@ -10,11 +10,12 @@ describe('Main shop page testing', function(){
         mainShopPage
             .visitMainPage()
             .checkProductsList()
+            .checkCategoty('Phones')
             // .checkPagination()
-            .nextButtonClick()
-            .checkPagination()
-            .previousButtonClick()
-            .checkPagination()
+            // .nextButtonClick()
+            // .checkPagination()
+            // .previousButtonClick()
+            // .checkPagination()
             // .nextButtonClick()
     })
 

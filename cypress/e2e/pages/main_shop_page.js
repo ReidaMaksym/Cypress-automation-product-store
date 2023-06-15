@@ -71,10 +71,19 @@ class mainShopPage {
 
             }).then(function(){
 
+                console.log(responce)
+
+                const {
+                    body: {Items}
+                } = responce
+
+                console.log(Items)
+
                 for(let i = 0; i < productsList.length; i++){
-                    expect(productsList[i].productName).contains(responce.body.Items[i].title)
-                    expect(productsList[i].productDescription).contains(responce.body.Items[i].desc)
-                    expect(productsList[i].productPrice).contains(responce.body.Items[i].price)
+
+                    expect(productsList[i].productName).contains(Items[i].title)
+                    expect(productsList[i].productDescription).contains(Items[i].desc)
+                    expect(productsList[i].productPrice).contains(Items[i].price)
                 }
 
             })
@@ -90,15 +99,19 @@ class mainShopPage {
             console.log(response)
             // response.body.Items
 
+            const {
+                body: {Items}
+            } = responce
+
             cy.getProducts().then(function(products){
                 console.log(products)
 
 
                 for(let i = 0; i < response.response.body.Items.length; i++){
 
-                    expect(products[i].productDescription).contains(response.response.body.Items[i].desc)
-                    expect(products[i].productName).contains(response.response.body.Items[i].title)
-                    expect(products[i].productPrice).contains(response.response.body.Items[i].price)
+                    expect(products[i].productDescription).contains(Items[i].desc)
+                    expect(products[i].productName).contains(Items[i].title)
+                    expect(products[i].productPrice).contains(Items[i].price)
                 }
 
             })
@@ -134,7 +147,18 @@ class mainShopPage {
 
         cy.get('@categoty').then(function(categotyItems){
 
+            console.log('--------------')
             console.log(categotyItems)
+
+            const {
+                response: {
+                    body: {
+                        Items
+                    }
+                }
+            } = categotyItems
+
+            console.log(Items)
 
             cy.getProducts().then(function(products){
 
@@ -142,9 +166,9 @@ class mainShopPage {
                 // response.body.Items
                 for(let i = 0; i < categotyItems.response.body.Items.length; i++){
 
-                    expect(products[i].productDescription).contains(categotyItems.response.body.Items[i].desc)
-                    expect(products[i].productName).contains(categotyItems.response.body.Items[i].title)
-                    expect(products[i].productPrice).contains(categotyItems.response.body.Items[i].price)
+                    expect(products[i].productDescription).contains(Items[i].desc)
+                    expect(products[i].productName).contains(Items[i].title)
+                    expect(products[i].productPrice).contains(Items[i].price)
                 }
 
             })

@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import {placeOrderData} from '../../fixtures/inputData'
 
 const cartPageLocators = {
     placeOrderBtn: '.btn.btn-success',
@@ -9,7 +10,8 @@ const cartPageLocators = {
     creditCardInput: 'input#card',
     monthInput: 'input#month',
     yearInput: 'input#year',
-    purchhaseBtn: "div#orderModal > div[role='document'] .btn.btn-primary"
+    purchhaseBtn: "div#orderModal > div[role='document'] .btn.btn-primary",
+    successMessage: '.showSweetAlert.sweet-alert.visible > h2'
 }
 
 class cartPage {
@@ -35,13 +37,23 @@ class cartPage {
 
             console.log(cartDetails)
 
+            const {
+                response: {
+                    body: {
+                        Items
+                    }
+                }
+            } = cartDetails
+
+            console.log(Items)
+
             // for(let i = 0; i < cartDetails.response.body.Items; i++){
             //     console.log(cartDetails.response.body.Items[i].prod_id)
 
             //     productIds.push(cartDetails.response.body.Items[i].prod_id)
             // }
 
-            cartDetails.response.body.Items.forEach(element => {
+            Items.forEach(element => {
 
                 console.log(element.prod_id)
                 productIds.push(element.prod_id)
@@ -152,6 +164,8 @@ class cartPage {
             
             cy.get('tr > td:nth-of-type(4) > a').each(function($el, index, $list){
 
+                console.log('1111111111111111--------------')
+
                 if(index === productIndex){
                     cy.get($el).click()
                 }
@@ -234,6 +248,21 @@ class cartPage {
             .clear()
             .type(year)
 
+        return this    
+
+    }
+
+    purchhaseBtnClick(){
+
+        cy.get(cartPageLocators.purchhaseBtn)
+            .click()
+        
+        cy.wait(2000)
+        
+        cy.get(cartPageLocators.successMessage).then(function(message){
+            expect(message.text()).contains(placeOrderData.successMessage)
+        })
+        
         return this    
 
     }

@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 
 let products = []
 
@@ -15,6 +16,7 @@ module.exports = defineConfig({
       //   return details;
 
       // })
+    
 
       on('task', {
         setProducts: (product) => {
@@ -27,7 +29,11 @@ module.exports = defineConfig({
         
       })
 
+      // allureWriter(on, config)
+      // return config
+
 
     },
   },
+  video: false
 });
