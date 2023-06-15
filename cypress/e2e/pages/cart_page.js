@@ -140,9 +140,9 @@ class cartPage {
         return this
     }
 
-    deleteItemFromCart(deleAllProducts, productIndex){
+    deleteItemFromCart({deleAllProducts = false, productIndexToDelete}){
 
-        if(deleAllProducts === true){
+        if(deleAllProducts === true && productIndexToDelete === -1){
 
             cy.isCartEmpty().then(function(cartData){
 
@@ -166,7 +166,7 @@ class cartPage {
 
                 console.log('1111111111111111--------------')
 
-                if(index === productIndex){
+                if(index === productIndexToDelete){
                     cy.get($el).click()
                 }
         
